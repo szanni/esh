@@ -10,7 +10,10 @@ if [ ! -f "$1" ]; then
   exit 1
 fi
 
-{ echo -n '#!/bin/sh -e }}'; cat "$1"; echo -n '{{'; } | sed \
-  -e 's|{{=|{{echo -n |g' \
-  -e 's|{{|\n{{\n)"\n|g' \
-  -e "s|}}|\necho -n \"\$(cat<<'{{'\n|g"
+stag="{{"
+etag="}}"
+
+{ echo -n "#!/bin/sh -e"; echo -n "$etag"; cat "$1"; echo -n "$stag"; } | sed \
+  -e "s|${stag}=|${stag}echo -n |g" \
+  -e "s|${stag}|\n${stag}\n)\"\n|g" \
+  -e "s|${etag}|\necho -n \"\$(cat<<'${stag}'\n|g"
