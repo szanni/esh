@@ -1,17 +1,30 @@
 #!/bin/sh
 
+usage () {
+  printf "Usage: %s: [-s value] [-e value] file\n" $0
+  exit 2
+}
+
+stag="{{"
+etag="}}"
+while getopts s:e: name
+do
+  case $name in
+    s)  stag="$OPTARG";;
+    e)  etag="$OPTARG";;
+    ?)  usage;;
+  esac
+done
+shift $(($OPTIND - 1))
+
 if [ "$#" -ne 1 ]; then
-  echo "Usage: $(basename $0) file"
-  exit 1
+  usage
 fi
 
 if [ ! -f "$1" ]; then
   echo "File not found: $1"
-  exit 1
+  exit 2
 fi
-
-stag="{{"
-etag="}}"
 
 { echo -n "#!/bin/sh -e"; echo -n "$etag"; cat "$1"; echo -n "$stag"; } | sed \
   -e "s|${stag}=|${stag}echo -n |g" \
