@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/sh -e
 
 usage () {
-  printf "Usage: %s: [-s value] [-e value] file\n" $0
+  printf "Usage: %s: [-s token] [-e token] [file]\n" "$0"
   exit 2
 }
 
@@ -17,16 +17,23 @@ do
 done
 shift $(($OPTIND - 1))
 
-if [ "$#" -ne 1 ]; then
-  usage
-fi
+case $# in
+  0)  file=$(cat);;
+  1)
+    if [ ! -f "$1" ]; then
+      printf "File not found: %s\n" "$1"
+      exit 2
+    fi
+    file=$(cat "$1")
+    ;;
+  ?)  usage;;
+esac
 
-if [ ! -f "$1" ]; then
-  echo "File not found: $1"
-  exit 2
-fi
-
-{ echo -n "#!/bin/sh -e"; echo -n "$etag"; cat "$1"; echo -n "$stag"; } | sed \
-  -e "s|${stag}=|${stag}echo -n |g" \
+script=$(echo -n "${etag}${file}${stag}" | sed \
+  -e "s|${stag}=|${stag}printf \"%s\" |g" \
   -e "s|${stag}|\n${stag}\n)\"\n|g" \
-  -e "s|${etag}|\necho -n \"\$(cat<<'${stag}'\n|g"
+  -e "s|${etag}|\nprintf \"%s\" \"\$(cat<<'${stag}'\n|g" \
+  )
+
+eval "$script"
+
