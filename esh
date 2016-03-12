@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $(basename $0) file"
+  exit 1
+fi
+
+if [ ! -f "$1" ]; then
+  echo "File not found: $1"
+  exit 1
+fi
+
+{ echo -n '#!/bin/sh -e }}'; cat "$1"; echo -n '{{'; } | sed \
+  -e 's|{{=|{{echo -n |g' \
+  -e 's|{{|\n{{\n)"\n|g' \
+  -e "s|}}|\necho -n \"\$(cat<<'{{'\n|g"
