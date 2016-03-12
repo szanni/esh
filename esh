@@ -5,8 +5,8 @@ usage () {
   exit 2
 }
 
-stag="{{"
-etag="}}"
+stag="<%"
+etag="%>"
 while getopts s:e: name
 do
   case $name in
