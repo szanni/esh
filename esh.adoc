@@ -1,0 +1,65 @@
+ESH(1)
+======
+
+NAME
+----
+esh - embedded shell
+
+SYNOPSIS
+--------
+*esh* ['-s token'] ['-e token'] ['file']
+
+DESCRIPTION
+-----------
+*esh* is a templating engine for evaluaing shell commands embedded in arbitrary
+templates.
+
+Lines between the start and end token are evaluated by the shell. A start token
+followed by a _=_ is syntactic sugar for _echo_, printing the following contents.
+
+*esh* will default to reading from 'stdin' if no 'file' parameter is given and
+prints the result to 'stdout'.
+
+OPTIONS
+-------
+*-s*::
+	Start token, defaults to <%
+*-e*::
+	End token, defaults to %>
+
+EXIT STATUS
+-----------
+*0*::
+	Success
+*2*::
+	Failure (illegal parameter; file not found; syntax error within the
+	template/embedded shell).
+
+EXAMPLES
+--------
+
+Example of an html template displaying the current directory contents in a list.
+[source,html]
+example.html.esh
+----
+<!DOCTYPE html>
+<html>
+<body>
+  <ul>
+  <% for i in $(ls); do %>
+    <li><%= $i %></li>
+  <% done %>
+  </ul>
+</body>
+</html>
+----
+
+To generate the resulting html run:
+[source,sh]
+----
+esh example.html.esh > example.html
+----
+
+SEE ALSO
+--------
+sh(1)
