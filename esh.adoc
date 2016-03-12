@@ -17,8 +17,8 @@ templates.
 Lines between the start and end token are evaluated by the shell. A start token
 followed by a _=_ is syntactic sugar for _echo_, printing the following contents.
 
-*esh* will default to reading from 'stdin' if no 'file' parameter is given and
-prints the result to 'stdout'.
+*esh* will default to reading from _stdin_ if no 'file' parameter is given and
+prints the result to _stdout_.
 
 OPTIONS
 -------
@@ -40,7 +40,7 @@ EXAMPLES
 
 Example of an html template displaying the current directory contents in a list.
 [source,html]
-example.html.esh
+.example.html.esh
 ----
 <!DOCTYPE html>
 <html>
