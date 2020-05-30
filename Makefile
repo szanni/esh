@@ -1,8 +1,8 @@
 .PHONY: all install dist clean
 
 PACKAGE = esh
-VERSION = 0.0.0
-DIST = Makefile ${PACKAGE} ${PACKAGE}.adoc ${PACKAGE}.1 LICENSE
+VERSION = 0.1.0
+DIST = Makefile ${PACKAGE} ${PACKAGE}.adoc ${PACKAGE}.1 LICENSE CHANGELOG
 
 PREFIX ?= /usr/local
 
