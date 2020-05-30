@@ -17,6 +17,10 @@ templates.
 Lines between the start and end token are evaluated by the shell. A start token
 followed by a _=_ is syntactic sugar for _echo_, printing the following contents.
 
+Like many other templating engines *esh* supports a front matter section for defining
+variables. This section is enclosed by two freestanding lines containing _---_ at the
+beginning of the file.
+
 *esh* will default to reading from _stdin_ if no 'file' parameter is given and
 prints the result to _stdout_.
 
@@ -58,6 +62,26 @@ To generate the resulting html run:
 [source,sh]
 ----
 esh example.html.esh > example.html
+----
+
+Another example showing the *esh* front matter capabilities.
+[source,html]
+.example.html.esh
+----
+---
+title="Test" # Make sure to use valid shell assignments!
+---
+<!DOCTYPE html>
+<html>
+<body>
+  <h1><%= $title %></h1>
+  <ul>
+  <% for i in $(ls); do %>
+    <li><%= $i %></li>
+  <% done %>
+  </ul>
+</body>
+</html>
 ----
 
 SEE ALSO

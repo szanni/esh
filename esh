@@ -29,11 +29,14 @@ case $# in
   ?)  usage;;
 esac
 
-script=$(echo -n "${etag}${file}${stag}" | sed \
+front=$(echo "${file}" | awk '/^---$/ { frontmatter = NR; next } frontmatter == 1 { print }')
+back=$(echo -n "${file}" | awk '/^---$/ { frontmatter = NR; next } frontmatter != 1 { print }')
+
+script=$(echo -n "${etag}${back}${stag}" | sed \
   -e "s|${stag}=|${stag}printf \"%s\" |g" \
   -e "s|${stag}|\n${stag}\n)\"\n|g" \
   -e "s|${etag}|\nprintf \"%s\" \"\$(cat<<'${stag}'\n|g" \
   )
 
-eval "$script"
+eval "$front $script"
 

@@ -1,6 +1,10 @@
+---
+title="Test"
+---
 <!DOCTYPE html>
 <html>
 <body>
+  <h1><%= $title %></h1>
   <ul>
   <!--<% for i in $(ls); do %>-->
     <li><%= $i %></li>
